@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+.landing-bg {
+  @apply bg-[url('/src/assets/running.gif')] bg-cover bg-no-repeat bg-center h-screen;
+}
+
+.header {
+  @apply h-screen relative flex justify-center items-center;
+}
+
+.aim-card {
+  @apply flex shadow-[2px_1px_5px_gray] rounded-[5px] p-[0.8rem];
+}
+
+.target-card {
+  @apply shadow-[1px_1px_2px_gray] rounded-[5px] p-[0.8rem];
+}
+
+.w-marquee {
+  @apply text-white font-bold text-[6rem] mr-[2rem];
+}

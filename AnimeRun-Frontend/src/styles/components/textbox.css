@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+input {
+  @apply bg-blue-900/70 rounded-[0.5rem] w-full text-white;
+}

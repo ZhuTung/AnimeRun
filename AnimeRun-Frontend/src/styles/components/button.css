@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.blue-btn {
+  @apply bg-blue-900
+    rounded-[0.5rem]
+    text-white
+    hover:bg-blue-400
+    transition
+    duration-[0.5s];
+}
