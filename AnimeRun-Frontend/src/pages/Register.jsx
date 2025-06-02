@@ -3,14 +3,36 @@ import "../styles/pages/login.css";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
-
+import useRegister
+ from "../utils/hooks/useRegister";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
-  const [name, setName] = useState("");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const useRegisterMutation = useRegister();
+
+  const navigate = useNavigate();
+
+  const handleRegister = () => {
+    useRegisterMutation.mutate({
+      first_name, last_name, age, gender, email, username, password
+    }, {
+      onSuccess: (data) => {
+        console.log(data);
+        navigate("/login")
+      },
+      onError: (err) => {
+        console.error(err)
+      }
+    })
+  }
+
   return (
     <div className="login-bg flex flex-row overflow-hidden">
       <motion.div
@@ -53,12 +75,24 @@ const Register = () => {
       >
         <div>
           <Textbox
-            label="Name"
-            id="name"
-            placeholder="Enter your name"
-            value={name}
+            label="First Name"
+            id="first_name"
+            placeholder="Enter your first name"
+            value={first_name}
             onChange={(e) => {
-              setName(e.target.value);
+              setFirstName(e.target.value);
+            }}
+            className={"p-2"}
+          />
+        </div>
+        <div>
+          <Textbox
+            label="Last Name"
+            id="last_name"
+            placeholder="Enter your last name"
+            value={last_name}
+            onChange={(e) => {
+              setLastName(e.target.value);
             }}
             className={"p-2"}
           />
@@ -127,7 +161,7 @@ const Register = () => {
         </div>
 
         <div className="mt-[1.5rem]">
-          <Button className={"w-[6.5rem] h-[2.5rem]"}>Register</Button>
+          <Button onClick={handleRegister} className={"w-[6.5rem] h-[2.5rem]"}>Register</Button>
         </div>
       </motion.div>
     </div>

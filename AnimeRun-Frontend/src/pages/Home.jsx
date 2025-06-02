@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import {
   LineChart,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const data = [
   {
@@ -56,10 +58,20 @@ const data = [
 ];
 
 const Home = () => {
+  const user = useSelector((state) => state.auth.user);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user === null) {
+      navigate("/");
+    }
+  }, [user]);
+
   return (
     <div>
       <div className="text-center px-[5rem] flex flex-col justify-center items-center ">
-        <h1 className="font-bold text-[5rem]">Welcome NewBie</h1>
+        <h1 className="font-bold text-[5rem]">Welcome {user?.username}</h1>
         <p className="py-[1rem]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos eligendi
           natus quos est voluptates? Dicta, inventore! Pariatur illo

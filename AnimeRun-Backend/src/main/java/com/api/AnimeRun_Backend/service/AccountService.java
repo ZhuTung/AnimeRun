@@ -1,15 +1,17 @@
 package com.api.AnimeRun_Backend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.api.AnimeRun_Backend.dto.AccountDto;
 import com.api.AnimeRun_Backend.entity.Account;
 import com.api.AnimeRun_Backend.mapper.AccountMapper;
 import com.api.AnimeRun_Backend.repository.AccountRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -34,10 +36,10 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
-    public Boolean login(String email, String password){
-        Account account = accountRepository.findByEmail(email)
+    public AccountDto login(String username, String password){
+        Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return passwordEncoder.matches(password, account.getPassword());
+        return AccountMapper.mapToDto(account);
     }
 }

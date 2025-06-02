@@ -1,10 +1,12 @@
 package com.api.AnimeRun_Backend.repository;
 
-import com.api.AnimeRun_Backend.entity.Account;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.api.AnimeRun_Backend.entity.Account;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByEmail(String email);
+    Optional<Account> findByUsername(String username);
 }

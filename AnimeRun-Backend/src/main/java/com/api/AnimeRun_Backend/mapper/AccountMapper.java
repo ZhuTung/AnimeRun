@@ -16,6 +16,7 @@ public class AccountMapper {
                 .age(account.getAge())
                 .gender(account.getGender())
                 .email(account.getEmail())
+                .username(account.getUsername())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class AccountMapper {
                 .age(dto.getAge())
                 .gender(dto.getGender())
                 .email(dto.getEmail())
+                .username(dto.getUsername())
                 .password(dto.getPassword())
                 .build();
     }

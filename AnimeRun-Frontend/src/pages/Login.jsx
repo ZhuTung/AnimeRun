@@ -4,9 +4,36 @@ import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
 
+import useLogin from '../utils/hooks/useLogin'
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const useLoginMutation = useLogin();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    console.log("Login Button clicked", username, password)
+    useLoginMutation.mutate({username, password},
+      {
+        onSuccess: (data) => {
+          console.log(data)
+          dispatch(login({ user: data }));
+          navigate("/home")
+        },
+        onError: (err) => {
+          console.error(err)
+        }
+      }
+    )
+  }
+
   return (
     <div className="login-bg flex flex-row overflow-hidden">
       <motion.div 
@@ -74,7 +101,7 @@ const Login = () => {
         </div>
 
         <div>
-          <Button className={'w-[6.5rem] h-[2.5rem]'}>Login</Button>
+          <Button onClick={handleLogin} className={'w-[6.5rem] h-[2.5rem]'}>Login</Button>
         </div>
       </motion.div>
     </div>

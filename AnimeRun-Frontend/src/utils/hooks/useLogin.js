@@ -1,8 +1,11 @@
-const { useMutation } = require("@tanstack/react-query");
-const login = require("../services/login");
+import {useMutation } from "@tanstack/react-query";
+import login from "../services/login";
 
 function useLogin() {
-  useMutation(["login"], login);
+  return useMutation({
+    mutationKey: ["login"],
+    mutationFn: login,
+  });
 }
 
-module.exports = useLogin;
+export default useLogin;

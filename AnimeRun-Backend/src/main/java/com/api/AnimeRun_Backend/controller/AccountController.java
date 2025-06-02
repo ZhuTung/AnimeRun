@@ -1,14 +1,20 @@
 package com.api.AnimeRun_Backend.controller;
 
-import com.api.AnimeRun_Backend.dto.AccountDto;
-import com.api.AnimeRun_Backend.service.AccountService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.api.AnimeRun_Backend.dto.AccountDto;
+import com.api.AnimeRun_Backend.service.AccountService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/account")
@@ -22,19 +28,18 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
+    public ResponseEntity<AccountDto> login(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
         String password = body.get("password");
 
-        // String message = "";
+        System.out.println("Body: " + body);
 
-        Boolean response = accountService.login(email, password);
+        AccountDto response = accountService.login(username, password);
 
-        if (response) {
-            return ResponseEntity.ok("Login Successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed");
+        if(response == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
