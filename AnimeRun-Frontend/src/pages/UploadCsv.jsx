@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import UploadBox from "../components/UploadBox";
+import useUploadFile from "../utils/hooks/useUploadFile";
 
 const UploadCsv = () => {
   const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
+
+  const useFileUploadMutation = useUploadFile();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -11,15 +15,10 @@ const UploadCsv = () => {
       if (!name.endsWith("_rk.csv")) {
         alert("Please upload a valid RunKeeper CSV file.");
       } else {
-        setFileName(name);
-        alert("File uploaded successfully!");
+        useFileUploadMutation.mutate({ file });
       }
     }
   };
-
-  useEffect(() => {
-    console.log(fileName);
-  }, []);
 
   return (
     <div>

@@ -6,11 +6,10 @@ import {
 import { motion } from "framer-motion";
 import { navbarLinks } from "../utils/items/navbar";
 import Button from "./Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,20 +26,13 @@ const Navbar = () => {
       className={isOpen ? "w-screen fixed z-10" : ""}
     >
       <motion.nav
-        initial={{
-          x: -200,
-        }}
-        animate={{
-          x: isOpen ? 0 : -200,
-        }}
-        transition={{
-          duration: 0.5,
-          ease: "linear",
-        }}
+        initial={{ x: -200 }}
+        animate={{ x: isOpen ? 0 : -200 }}
+        transition={{ duration: 0.5, ease: "linear" }}
         className="bg-blue-500 w-[200px] h-[100vh] relative"
       >
         <div
-          className="text-[35px] absolute -right-5"
+          className="text-[35px] absolute -right-5 cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
@@ -55,23 +47,27 @@ const Navbar = () => {
             <ul>
               {navbarLinks.map((item, index) => (
                 <li key={index} className="my-[1.5rem]">
-                  <motion.a
-                    href={item.link}
+                  <motion.div
                     whileHover={{
                       backgroundColor: "rgba(0, 0, 0, 0.5)",
                       color: "white",
                     }}
-                    className="block px-4 py-2 rounded-md cursor-pointer transition-colors "
+                    className="px-4 py-2 rounded-md transition-colors"
                   >
-                    {item.name}
-                  </motion.a>
+                    <Link
+                      to={item.link}
+                      className="block w-full text-white hover:text-white"
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="flex justify-center mb-[10px]">
-            <Button className={"p-[0.5rem] !bg-black"} onClick={handleLogout}>
+            <Button className="p-[0.5rem] !bg-black" onClick={handleLogout}>
               Log Out
             </Button>
           </div>

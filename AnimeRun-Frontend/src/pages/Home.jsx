@@ -63,7 +63,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user === null) {
+    if (!user) {
       navigate("/");
     }
   }, [user]);
