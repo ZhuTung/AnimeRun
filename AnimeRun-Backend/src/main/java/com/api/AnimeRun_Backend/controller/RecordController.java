@@ -3,6 +3,7 @@ package com.api.AnimeRun_Backend.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 public class RecordController {
     private final RecordService recordService;
 
-    @GetMapping
-    public List<RecordDto> getAllAccounts() {
-        return recordService.getAllRecords();
+    @GetMapping("/getRecord/{id}")
+    public List<RecordDto> getAllAccounts(@PathVariable("id") Integer id) {
+        return recordService.getAllRecords(id);
     }
 
     @GetMapping("/test")
@@ -30,7 +31,7 @@ public class RecordController {
     }
 
     @PostMapping("/uploadFile")
-    public void uploadFile(@RequestParam("file") MultipartFile file) {
-        recordService.uploadFile(file);
+    public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
+        recordService.uploadFile(file, userId);
     }
 }

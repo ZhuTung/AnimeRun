@@ -4,10 +4,11 @@ import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
 
-import useLogin from '../utils/hooks/useLogin'
+import useLogin from "../utils/hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -19,36 +20,37 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const handleLogin = () => {
-    console.log("Login Button clicked", username, password)
-    useLoginMutation.mutate({username, password},
+    console.log("Login Button clicked", username, password);
+    useLoginMutation.mutate(
+      { username, password },
       {
         onSuccess: (data) => {
-          console.log(data)
+          toast.success("Login successful!");
           dispatch(login({ user: data }));
-          navigate("/home")
+          navigate("/home");
         },
         onError: (err) => {
-          console.error(err)
-        }
+          toast.error("Login failed: " + err.message);
+        },
       }
-    )
-  }
+    );
+  };
 
   return (
     <div className="login-bg flex flex-row overflow-hidden">
-      <motion.div 
-      initial={{
-        x: -200,
-        opacity: 0
-      }}
-      whileInView={{
-        x: 0,
-        opacity: 1
-      }}
-      transition={{
-        duration: 1,
-        ease: "easeInOut"
-      }}
+      <motion.div
+        initial={{
+          x: -200,
+          opacity: 0,
+        }}
+        whileInView={{
+          x: 0,
+          opacity: 1,
+        }}
+        transition={{
+          duration: 1,
+          ease: "easeInOut",
+        }}
       >
         <img
           src="src\assets\track-field-2.jpeg"
@@ -60,19 +62,20 @@ const Login = () => {
       </motion.div>
 
       <motion.div
-      initial={{
-        x: 200,
-        opacity: 0
-      }}
-      whileInView={{
-        x: 0,
-        opacity: 1
-      }}
-      transition={{
-        duration: 1,
-        ease: "easeInOut"
-      }}
-      className="flex flex-col container h-[40%] w-[50%] ml-8 justify-evenly">
+        initial={{
+          x: 200,
+          opacity: 0,
+        }}
+        whileInView={{
+          x: 0,
+          opacity: 1,
+        }}
+        transition={{
+          duration: 1,
+          ease: "easeInOut",
+        }}
+        className="flex flex-col container h-[40%] w-[50%] ml-8 justify-evenly"
+      >
         <div>
           <Textbox
             label="Username"
@@ -101,7 +104,9 @@ const Login = () => {
         </div>
 
         <div>
-          <Button onClick={handleLogin} className={'w-[6.5rem] h-[2.5rem]'}>Login</Button>
+          <Button onClick={handleLogin} className={"w-[6.5rem] h-[2.5rem]"}>
+            Login
+          </Button>
         </div>
       </motion.div>
     </div>

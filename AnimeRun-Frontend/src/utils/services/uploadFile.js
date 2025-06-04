@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const uploadFile = async ({ file }) => {
+const uploadFile = async ({ file, userId }) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("userId", userId);
     const response = await axios.post(
       "http://localhost:8080/api/record/uploadFile",
       formData,

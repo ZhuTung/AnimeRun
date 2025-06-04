@@ -166,6 +166,7 @@ const Landing = () => {
                 ease: "easeInOut",
               }}
               id={index}
+              key={index}
               className="target-card h-[250px]"
             >
               <p className="mb-[0.5rem] font-bold">{item.heading}</p>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.AnimeRun_Backend.dto.AccountDto;
 import com.api.AnimeRun_Backend.service.AccountService;
+import com.api.AnimeRun_Backend.utils.ErrorResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +29,7 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AccountDto> login(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
 
@@ -36,8 +37,9 @@ public class AccountController {
 
         AccountDto response = accountService.login(username, password);
 
-        if(response == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Invalid Username or Password"));
         }
         return ResponseEntity.ok(response);
     }

@@ -22,14 +22,14 @@ import lombok.AllArgsConstructor;
 public class RecordService {
     private final RecordRepository recordRepository;
 
-    public List<RecordDto> getAllRecords() {
-        return recordRepository.findAll()
+    public List<RecordDto> getAllRecords(Integer userId) {
+        return recordRepository.findByUserId(userId)
                 .stream()
                 .map(RecordMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    public void uploadFile(MultipartFile file) {
+    public void uploadFile(MultipartFile file, Integer userId) {
         if (file != null && !file.isEmpty()) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
                 String line;
@@ -42,6 +42,7 @@ public class RecordService {
                     try {
                         RecordDto recordDto = RecordDto.builder()
                                 .date(dateFormat.parse(data[0].trim()))
+                                .userId(userId)
                                 .distance(Double.parseDouble(data[1].trim()))
                                 .calories_burned(Integer.parseInt(data[2].trim()))
                                 .avg_heart_rate(Integer.parseInt(data[3].trim()))

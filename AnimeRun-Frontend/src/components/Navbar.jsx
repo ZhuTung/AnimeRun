@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IoIosArrowDroprightCircle,
   IoIosArrowDropleftCircle,
@@ -7,10 +7,19 @@ import { motion } from "framer-motion";
 import { navbarLinks } from "../utils/items/navbar";
 import Button from "./Button";
 import { useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleLogout = () => {
     navigate("/");
@@ -50,7 +59,7 @@ const Navbar = () => {
                   <motion.div
                     whileHover={{
                       backgroundColor: "rgba(0, 0, 0, 0.5)",
-                      color: "white",
+                      color: "rgb(255, 255, 255)",
                     }}
                     className="px-4 py-2 rounded-md transition-colors"
                   >

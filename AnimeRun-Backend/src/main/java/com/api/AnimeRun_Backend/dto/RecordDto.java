@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RecordDto {
     private Long id;
+    private Integer userId;
     private Date date;
     private Double distance;
     private Integer calories_burned;

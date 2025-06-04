@@ -11,6 +11,7 @@ public class RecordMapper {
 
         return RecordDto.builder()
                 .id(record.getId())
+                .userId(record.getUserId())
                 .date(record.getDate())
                 .distance(record.getDistance())
                 .calories_burned(record.getCalories_burned())
@@ -25,6 +26,7 @@ public class RecordMapper {
 
         return Record.builder()
                 .id(dto.getId())
+                .userId(dto.getUserId())
                 .date(dto.getDate())
                 .distance(dto.getDistance())
                 .calories_burned(dto.getCalories_burned())

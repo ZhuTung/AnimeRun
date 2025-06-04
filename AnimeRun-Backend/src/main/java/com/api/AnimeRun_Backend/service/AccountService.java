@@ -19,7 +19,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AccountDto register(AccountDto dto){
+    public AccountDto register(AccountDto dto) {
         Account account = AccountMapper.mapToEntity(dto);
         String hashedPassword = passwordEncoder.encode(account.getPassword());
 
@@ -29,17 +29,24 @@ public class AccountService {
         return AccountMapper.mapToDto(saved);
     }
 
-    public List<AccountDto> getAllAccounts(){
+    public List<AccountDto> getAllAccounts() {
         return accountRepository.findAll()
                 .stream()
                 .map(AccountMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    public AccountDto login(String username, String password){
-        Account account = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public AccountDto login(String username, String password) {
+        try {
+            Account account = accountRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return AccountMapper.mapToDto(account);
+            return AccountMapper.mapToDto(account);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }
+
     }
 }

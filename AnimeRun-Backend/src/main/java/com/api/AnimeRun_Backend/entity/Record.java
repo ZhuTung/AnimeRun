@@ -21,6 +21,7 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer userId;
     private Date date;
     private Double distance;
     private Integer calories_burned;

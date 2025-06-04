@@ -10,64 +10,38 @@ import {
   Legend,
 } from "recharts";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import useGetRecord from "../utils/hooks/useGetRecord";
+import dayjs from "dayjs";
 
 const Home = () => {
   const user = useSelector((state) => state.auth.user);
 
-  const navigate = useNavigate();
+  const { data } = useGetRecord(user?.id);
+
+  const [avgDistance, setAvgDistance] = useState(0);
+  const [totalCaloriesBurned, setTotalCaloriesBurned] = useState(0);
+  const [avgHeartRate, setAvgHeartRate] = useState(0);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, [user]);
+    const totalDistance = data?.reduce(
+      (acc, record) => acc + record.distance,
+      0
+    );
+    const totalCalories = data?.reduce(
+      (acc, record) => acc + record.calories_burned,
+      0
+    );
+    const totalHeartRate = data?.reduce(
+      (acc, record) => acc + record.avg_heart_rate,
+      0
+    );
 
+    setAvgDistance(totalDistance / data?.length);
+    setTotalCaloriesBurned(totalCalories);
+    setAvgHeartRate(totalHeartRate / data?.length);
+  }, [data]);
+
+  console.log(data);
   return (
     <div>
       <div className="text-center px-[5rem] flex flex-col justify-center items-center ">
@@ -79,24 +53,103 @@ const Home = () => {
           asperiores officiis vel non!
         </p>
 
-        <div className="shadow-[2px_1px_5px_gray] rounded-[5px]">
-          <LineChart width={500} height={300} data={data} className="m-[2rem]">
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="name"
-              label={{ value: "X Axis", position: "insideBottom", offset: -10 }}
-            />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
+        <div className="mb-[1rem]">
+          <h1 className="text-[3rem] font-bold">Distance Runned</h1>
+          <div className="shadow-[2px_1px_5px_gray] rounded-[5px] my-[1.5rem] pt-[1.5rem]">
+            <h1>Average Distance: {avgDistance.toFixed(2)} km</h1>
+            <LineChart
+              width={600}
+              height={300}
+              data={data}
+              className="m-[2rem]"
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(dateStr) => dayjs(dateStr).format("MMM D")}
+                label={{
+                  value: "Date",
+                  position: "insideBottomRight",
+                  offset: -5,
+                }}
+              />
+              <YAxis dataKey="distance" />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="distance"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
+        </div>
+
+        <div className="mb-[1rem]">
+          <h1 className="text-[3rem] font-bold">Calories</h1>
+          <div className="shadow-[2px_1px_5px_gray] rounded-[5px] my-[1.5rem] pt-[1.5rem]">
+            <h1>Total Calories Burned: {totalCaloriesBurned} cal</h1>
+            <LineChart
+              width={600}
+              height={300}
+              data={data}
+              className="m-[2rem]"
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(dateStr) => dayjs(dateStr).format("MMM D")}
+                label={{
+                  value: "Date",
+                  position: "insideBottomRight",
+                  offset: -5,
+                }}
+              />
+              <YAxis dataKey="calories_burned" />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="calories_burned"
+                stroke="#1aff1a"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
+        </div>
+
+        <div className="mb-[1rem]">
+          <h1 className="text-[3rem] font-bold">Heart Rate</h1>
+          <div className="shadow-[2px_1px_5px_gray] rounded-[5px] my-[1.5rem] pt-[1.5rem]">
+            <h1>Average Heart Rate: {avgHeartRate.toFixed(2)} bpm</h1>
+            <LineChart
+              width={600}
+              height={300}
+              data={data}
+              className="m-[2rem]"
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(dateStr) => dayjs(dateStr).format("MMM D")}
+                label={{
+                  value: "Date",
+                  position: "insideBottomRight",
+                  offset: -5,
+                }}
+              />
+              <YAxis dataKey="avg_heart_rate" />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="avg_heart_rate"
+                stroke="#0099ff"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
         </div>
       </div>
     </div>
