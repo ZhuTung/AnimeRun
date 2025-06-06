@@ -37,15 +37,30 @@ public class AccountService {
     }
 
     public AccountDto login(String username, String password) {
-        try {
-            Account account = accountRepository.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        } else {
             return AccountMapper.mapToDto(account);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        }
+    }
 
+    public String changePassword(Long userId, String currentPassword, String newPassword, String confirmPassword) {
+        Account account = accountRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(currentPassword, account.getPassword())) {
+            throw new RuntimeException("Wrong Current Password");
+        } else if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("New and Confirm Password does not match");
+        } else {
+            String hashedNewPassword = passwordEncoder.encode(newPassword);
+            account.setPassword(hashedNewPassword);
+
+            accountRepository.save(account);
+
+            return "Password updated successfully";
         }
 
     }

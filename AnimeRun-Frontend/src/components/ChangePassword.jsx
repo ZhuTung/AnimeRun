@@ -2,23 +2,39 @@ import React, { useState } from "react";
 import Button from "./Button";
 import Textbox from "./Textbox";
 import toast from "react-hot-toast";
+import useChangePassword from "../utils/hooks/useChangePassword";
+import { useSelector } from "react-redux";
 
 const ChangePassword = ({ changePasswordFlag, setChangePasswordFlag }) => {
-  const [formData, setFormData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   if (!changePasswordFlag) return null;
 
+  const user = useSelector((state) => state.auth.user);
+
+  const useChangePasswordMutation = useChangePassword();
+
+  const handleSubmit = () => {
+    useChangePasswordMutation.mutate(
+      {
+        userId: user?.id,
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Password changed successfully!");
+          setChangePasswordFlag(false);
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      }
+    );
+  };
   return (
     <div
       style={{ background: "rgba(0, 0, 0, 0.8)" }}
@@ -44,8 +60,8 @@ const ChangePassword = ({ changePasswordFlag, setChangePasswordFlag }) => {
               type="password"
               name="currentPassword"
               placeholder="Enter current password"
-              value={formData.currentPassword}
-              onChange={handleChange}
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </div>
 
@@ -57,8 +73,8 @@ const ChangePassword = ({ changePasswordFlag, setChangePasswordFlag }) => {
               type="password"
               name="newPassword"
               placeholder="Enter new password"
-              value={formData.newPassword}
-              onChange={handleChange}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
           </div>
 
@@ -70,20 +86,13 @@ const ChangePassword = ({ changePasswordFlag, setChangePasswordFlag }) => {
               type="password"
               name="confirmPassword"
               placeholder="Confirm new password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 
           <div className="flex space-x-4 mt-6">
-            <Button
-              className={"px-[0.5rem]"}
-              onClick={() => {
-                // Add your password change logic here
-                console.log(formData);
-                setChangePasswordFlag(false);
-              }}
-            >
+            <Button className={"px-[0.5rem]"} onClick={handleSubmit}>
               Confirm
             </Button>
             <Button

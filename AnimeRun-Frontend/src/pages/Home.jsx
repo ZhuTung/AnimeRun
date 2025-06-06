@@ -41,7 +41,6 @@ const Home = () => {
     setAvgHeartRate(totalHeartRate / data?.length);
   }, [data]);
 
-  console.log(data);
   return (
     <div>
       <div className="text-center px-[5rem] flex flex-col justify-center items-center ">

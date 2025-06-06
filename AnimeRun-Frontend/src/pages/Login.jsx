@@ -20,7 +20,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const handleLogin = () => {
-    console.log("Login Button clicked", username, password);
     useLoginMutation.mutate(
       { username, password },
       {

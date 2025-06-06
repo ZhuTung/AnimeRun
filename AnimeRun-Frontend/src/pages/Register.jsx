@@ -3,8 +3,7 @@ import "../styles/pages/login.css";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { motion } from "framer-motion";
-import useRegister
- from "../utils/hooks/useRegister";
+import useRegister from "../utils/hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [first_name, setFirstName] = useState("");
@@ -20,18 +19,26 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleRegister = () => {
-    useRegisterMutation.mutate({
-      first_name, last_name, age, gender, email, username, password
-    }, {
-      onSuccess: (data) => {
-        console.log(data);
-        navigate("/login")
+    useRegisterMutation.mutate(
+      {
+        first_name,
+        last_name,
+        age,
+        gender,
+        email,
+        username,
+        password,
       },
-      onError: (err) => {
-        console.error(err)
+      {
+        onSuccess: (data) => {
+          navigate("/login");
+        },
+        onError: (err) => {
+          console.error(err);
+        },
       }
-    })
-  }
+    );
+  };
 
   return (
     <div className="login-bg flex flex-row overflow-hidden">
@@ -161,7 +168,9 @@ const Register = () => {
         </div>
 
         <div className="mt-[1.5rem]">
-          <Button onClick={handleRegister} className={"w-[6.5rem] h-[2.5rem]"}>Register</Button>
+          <Button onClick={handleRegister} className={"w-[6.5rem] h-[2.5rem]"}>
+            Register
+          </Button>
         </div>
       </motion.div>
     </div>

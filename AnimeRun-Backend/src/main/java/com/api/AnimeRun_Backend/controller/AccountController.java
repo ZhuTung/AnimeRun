@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,15 +34,30 @@ public class AccountController {
         String username = body.get("username");
         String password = body.get("password");
 
-        System.out.println("Body: " + body);
-
-        AccountDto response = accountService.login(username, password);
-
-        if (response == null) {
+        try {
+            AccountDto response = accountService.login(username, password);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("Invalid Username or Password"));
+                    .body(new ErrorResponse(e.getMessage()));
         }
-        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, Object> body) {
+        Object id = body.get("userId");
+        Long userId = ((Number) id).longValue();
+        String currentPassword = (String) body.get("currentPassword");
+        String newPassword = (String) body.get("newPassword");
+        String confirmPassword = (String) body.get("confirmPassword");
+
+        try {
+            String response = accountService.changePassword(userId, currentPassword, newPassword, confirmPassword);
+
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
+        }
     }
 
     @GetMapping

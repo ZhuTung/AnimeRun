@@ -6,8 +6,6 @@ const getRecord = async (userId) => {
       `http://localhost:8080/api/record/getRecord/${userId}`
     );
 
-    console.log(userId);
-
     return response.data;
   } catch (err) {
     console.error(err);
